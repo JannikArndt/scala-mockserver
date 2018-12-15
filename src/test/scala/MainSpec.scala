@@ -1,16 +1,24 @@
-import akka.actor.{ActorRef, ActorSystem, Props}
-import akka.testkit.TestKit
+import akka.http.scaladsl.server.Directives._
+import akka.http.scaladsl.server.Route
 import org.scalatest.{BeforeAndAfterAll, FlatSpecLike, Matchers}
 
-class MainSpec(_system: ActorSystem) extends TestKit(_system) with FlatSpecLike with Matchers with BeforeAndAfterAll {
+import scala.io.Source
 
-  def this() = this(ActorSystem("TestSystem"))
+class MainSpec extends FlatSpecLike with Matchers with BeforeAndAfterAll {
 
-  override def afterAll(): Unit = {
-    shutdown(system)
-  }
+  "This test" should "provide a server" in {
 
-  "This test" should "do nothing" in {
+    val routes: Route = path("foo") {
+      println("inside route")
+      complete("bar")
+    }
+
+    MockServer.calling("localhost", 2016, routes) { (host, port) =>
+      println("inside test")
+      val load = Source.fromURL(s"http://127.0.0.1:$port/foo").mkString
+      println(s"load = $load")
+      load shouldBe "bar"
+    }
 
   }
 }

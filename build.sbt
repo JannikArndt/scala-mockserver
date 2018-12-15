@@ -15,15 +15,16 @@ libraryDependencies ++= Seq(
   //  "com.typesafe.akka" %% "akka-cluster-metrics" % akkaVersion,
   //  "com.typesafe.akka" %% "akka-persistence" % akkaVersion,
   //  "com.typesafe.akka" %% "akka-contrib" % akkaVersion,
-  //  "com.typesafe.akka" %% "akka-http" % akkaHttpVersion,
+    "com.typesafe.akka" %% "akka-http" % akkaHttpVersion,
+    "com.typesafe.akka" %% "akka-stream" % "2.5.12",
 
-  //  "com.typesafe.akka" %% "akka-testkit" % akkaVersion % Test,
-  //  "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % Test,
+//  "com.typesafe.akka" %% "akka-testkit" % akkaVersion % Test,
+    "com.typesafe.akka" %% "akka-http-testkit" % akkaHttpVersion % Test,
 
   //  "de.heikoseeberger" %% "akka-http-json4s" % "1.22.0",
   //  "org.json4s" %% "json4s-native" % "3.6.1",
 
-  //  "org.scalatest" %% "scalatest" % "3.0.5" % Test
+    "org.scalatest" %% "scalatest" % "3.0.5" % Test,
 
   //  "com.typesafe.slick" %% "slick" % "3.2.3",
   //  "com.typesafe.slick" %% "slick-hikaricp" % "3.2.3",
@@ -34,7 +35,7 @@ libraryDependencies ++= Seq(
   //  "io.underscore" %% "slickless" % "0.3.3",
   //  "org.scala-lang.modules" %% "scala-java8-compat" % "0.9.0",
 
-  //  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.0",
-  //  "ch.qos.logback" % "logback-classic" % "1.2.3",
-  //  "org.slf4j" % "slf4j-simple" % "1.7.25",
+    "com.typesafe.scala-logging" %% "scala-logging" % "3.9.0",
+    "ch.qos.logback" % "logback-classic" % "1.2.3",
+    "org.slf4j" % "slf4j-simple" % "1.7.25"
 )
