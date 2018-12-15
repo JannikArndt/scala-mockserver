@@ -19,12 +19,14 @@ object MockServer extends LazyLogging {
     val testRun = bindingFuture.map { binding =>
       logger.info(s"server started at $binding, running test…")
       try {
+        // run test
         f(binding.localAddress.getHostName, binding.localAddress.getPort.toString)
       } finally {
-        logger.info("Test finished, unbinding…")
-        binding.unbind()
+        // unbind, so the port can be reused by the next test
+        logger.info("Test finished, terminating…")
+        binding.terminate(1.second)
         theSystem.terminate()
-        logger.info("Binding unbund, System terminated.")
+        logger.info("System terminated.")
       }
     }
 
