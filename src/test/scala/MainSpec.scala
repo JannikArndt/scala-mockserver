@@ -19,4 +19,18 @@ class MainSpec extends FlatSpecLike with Matchers with BeforeAndAfterAll {
     }
 
   }
+
+  "Calling unexpected routes" should "throw an exception" in {
+
+    val routes: Route = path("foo") {
+      complete("bar")
+    }
+
+    an[Exception] should be thrownBy {
+      calling(routes) { (host, port) =>
+        Source.fromURL(s"http://$host:$port/foobar").mkString
+      }
+    }
+
+  }
 }
