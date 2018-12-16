@@ -22,18 +22,24 @@ object MockServer extends LazyLogging {
     val errors: mutable.Buffer[HttpRequest] = mutable.Buffer[HttpRequest]()
     def errorsString = errors.map(req => s"${req.method.value} ${req.uri.toString()}").mkString("\n")
 
+    var mockWasCalledAtLeastOnce = false
+
     def failOnUnexpectedRequests(throwable: Option[Throwable] = None): Unit = {
       throwable match {
         case Some(t) if errors.isEmpty           => throw t
         case Some(t: UnexpectedRequestException) => throw t
         case Some(t)                             => throw new Exception(s"Error in test: $t and ${errors.size} unexpected request(s) occurred: $errorsString")
         case None if errors.nonEmpty             => throw new UnexpectedRequestException(s"${errors.size} unexpected request(s) occurred: $errorsString")
+        case None if !mockWasCalledAtLeastOnce   => throw new Exception("Error in test: MockServer was not called.")
         case None                                =>
       }
     }
 
     // Extend given routes by error handling
-    val routesPlusErrorHandling = routes ~
+    val routesPlusErrorHandling = extractRequestContext { ctx =>
+      mockWasCalledAtLeastOnce = true
+      routes
+    } ~
       extractRequestContext { ctx =>
         errors.append(ctx.request)
         complete(StatusCodes.BadRequest)
